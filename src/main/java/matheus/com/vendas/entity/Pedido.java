@@ -1,21 +1,19 @@
 package matheus.com.vendas.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "pedido")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "pedido")
 public class Pedido {
 
     @Id

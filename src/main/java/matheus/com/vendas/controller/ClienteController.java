@@ -15,8 +15,12 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    public ClienteController(ClienteRepository clienteRepository){
+        this.clienteRepository = clienteRepository;
+    }
 
     @GetMapping("/{id}")
     public Cliente buscarClientePorId(@PathVariable("id") Integer id) {

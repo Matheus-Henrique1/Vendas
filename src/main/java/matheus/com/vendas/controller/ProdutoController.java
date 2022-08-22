@@ -18,8 +18,14 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/produtos")
 public class ProdutoController {
 
+    private ProdutoRepository produtoRepository;
+
     @Autowired
-    ProdutoRepository produtoRepository;
+    public ProdutoController(ProdutoRepository produtoRepository){
+        this.produtoRepository = produtoRepository;
+    }
+
+
 
     @GetMapping("/{id}")
     public Produto buscarProdutoPorId(@PathVariable("id") Integer id) {
