@@ -1,6 +1,6 @@
-package matheus.com.vendas.domain.repositorio;
+package matheus.com.vendas.repository;
 
-import matheus.com.vendas.domain.entity.Cliente;
+import matheus.com.vendas.entity.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,8 +29,11 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
     void deleteByNome(String nome);
 
-    @Query(value = "delete from Cliente c where c.nome =:nome")
+    @Query("delete from Cliente c where c.nome = :nome")
     @Modifying
     void deleteByNome2(@Param("nome") String nome);
+
+    @Query("select c from Cliente c left join fetch c.pedidos p where c.id = :id")
+    Cliente buscarClienteEProdutos(@Param("id") Integer id);
 
 }
