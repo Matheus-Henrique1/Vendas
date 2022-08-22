@@ -6,6 +6,8 @@ import matheus.com.vendas.entity.Cliente;
 import matheus.com.vendas.entity.ItemPedido;
 import matheus.com.vendas.entity.Pedido;
 import matheus.com.vendas.entity.Produto;
+import matheus.com.vendas.enums.StatusPedido;
+import matheus.com.vendas.exception.PedidoNaoEncontradoException;
 import matheus.com.vendas.exception.RegraNegocioException;
 import matheus.com.vendas.repository.ClienteRepository;
 import matheus.com.vendas.repository.ItemPedidoRepository;
@@ -53,6 +55,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.REALIZADO);
 
         List<ItemPedido> itensPedido = converterItens(pedido, dto.getItens());
         pedidoRepository.save(pedido);
@@ -82,8 +85,18 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Optional<Pedido> obterPedidoCompleto(Integer id){
+    public Optional<Pedido> obterPedidoCompleto(Integer id) {
         return pedidoRepository.findyByIdFetchItens(id);
     }
 
+    @Override
+    @Transactional
+    public void atualizarStatus(Integer id, StatusPedido statusPedido) {
+        pedidoRepository
+                .findById(id)
+                .map(pedido -> {
+                    pedido.setStatus(statusPedido);
+                    return pedidoRepository.save(pedido);
+                }).orElseThrow(() -> new PedidoNaoEncontradoException("Pedido não encontrado. "));
+    }
 }

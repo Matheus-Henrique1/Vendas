@@ -1,13 +1,16 @@
 package matheus.com.vendas.controller;
 
+import matheus.com.vendas.dto.AtualizacaoStatusPedidoDTO;
 import matheus.com.vendas.dto.PedidoDTO;
 import matheus.com.vendas.dto.SaidaItemPedidoDTO;
 import matheus.com.vendas.dto.SaidaPedidoDTO;
 import matheus.com.vendas.entity.ItemPedido;
 import matheus.com.vendas.entity.Pedido;
+import matheus.com.vendas.enums.StatusPedido;
 import matheus.com.vendas.exception.RegraNegocioException;
 import matheus.com.vendas.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -54,6 +57,7 @@ public class PedidoController {
                 .cpf(pedido.getCliente().getCpf())
                 .nomeCliente(pedido.getCliente().getNome())
                 .totalPedido(pedido.getTotal())
+                .status(pedido.getStatus().name())
                 .itens(converterItemPedido(pedido.getItens()))
                 .build();
 
@@ -71,6 +75,13 @@ public class PedidoController {
                         .quantidade(item.getQuantidade())
                         .build()
         ).collect(Collectors.toList());
+    }
+
+    @PatchMapping("/atualizar-status/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizarStatus(@PathVariable("id") Integer id, @RequestBody AtualizacaoStatusPedidoDTO dto) {
+        String novoStatus = dto.getNovoStatus();
+        service.atualizarStatus(id, StatusPedido.valueOf(novoStatus));
     }
 
 }

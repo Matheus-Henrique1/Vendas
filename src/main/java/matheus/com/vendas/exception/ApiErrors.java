@@ -1,4 +1,4 @@
-package matheus.com.vendas.controller;
+package matheus.com.vendas.exception;
 
 import lombok.Getter;
 

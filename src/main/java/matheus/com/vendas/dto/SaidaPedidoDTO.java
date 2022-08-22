@@ -19,5 +19,6 @@ public class SaidaPedidoDTO {
     private String nomeCliente;
     private BigDecimal totalPedido;
     private String dataPedido;
+    private String status;
     private List<SaidaItemPedidoDTO> itens;
 }

@@ -29,13 +29,6 @@ public class Cliente {
     @Column(name = "cpf", length = 11)
     private String cpf;
 
-    @Override
-    public String toString() {
-        return "Cliente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                '}';
-    }
 }
 
 
