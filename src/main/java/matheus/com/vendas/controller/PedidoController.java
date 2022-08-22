@@ -7,7 +7,6 @@ import matheus.com.vendas.dto.SaidaPedidoDTO;
 import matheus.com.vendas.entity.ItemPedido;
 import matheus.com.vendas.entity.Pedido;
 import matheus.com.vendas.enums.StatusPedido;
-import matheus.com.vendas.exception.RegraNegocioException;
 import matheus.com.vendas.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +14,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +36,7 @@ public class PedidoController {
 
     @PostMapping("/cadastrar")
     @ResponseStatus(CREATED)
-    public Integer cadastrar(@RequestBody PedidoDTO dto) {
+    public Integer cadastrar(@Valid @RequestBody PedidoDTO dto) {
         Pedido pedido = service.salvar(dto);
         return pedido.getId();
     }
