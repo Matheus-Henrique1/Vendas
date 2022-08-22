@@ -1,4 +1,4 @@
-package matheus.com.vendas;
+package matheus.com.vendas.controller;
 
 import lombok.Getter;
 

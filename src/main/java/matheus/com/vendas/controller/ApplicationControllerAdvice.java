@@ -1,6 +1,5 @@
 package matheus.com.vendas.controller;
 
-import matheus.com.vendas.ApiErrors;
 import matheus.com.vendas.exception.RegraNegocioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
