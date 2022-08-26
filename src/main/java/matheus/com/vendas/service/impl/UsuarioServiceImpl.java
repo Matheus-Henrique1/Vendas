@@ -22,14 +22,14 @@ public class UsuarioServiceImpl implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     @Transactional
-    public Usuario salvar(Usuario usuario){
+    public Usuario salvar(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
-    public UserDetails autenticar(Usuario usuario){
+    public UserDetails autenticar(Usuario usuario) {
         UserDetails user = loadUserByUsername(usuario.getLogin());
         boolean senhasBatem = passwordEncoder.matches(usuario.getSenha(), user.getPassword());
-        if(senhasBatem){
+        if (senhasBatem) {
             return user;
         }
         throw new SenhaInvalidaException();
@@ -39,9 +39,9 @@ public class UsuarioServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Usuario usuario = usuarioRepository.findByLogin(username)
-        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados. "));
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados. "));
 
-        String[] roles = usuario.isAdmin() ? new String[]{"ADMIN","USER"} : new String[]{"USER"};
+        String[] roles = usuario.isAdmin() ? new String[]{"ADMIN", "USER"} : new String[]{"USER"};
 
         return User.builder()
                 .username(usuario.getLogin())
