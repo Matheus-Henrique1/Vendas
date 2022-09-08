@@ -1,5 +1,7 @@
 package matheus.com.vendas.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import matheus.com.vendas.dto.CredenciaisDTO;
 import matheus.com.vendas.dto.TokenDTO;
 import matheus.com.vendas.entity.Usuario;
@@ -18,6 +20,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("usuarios")
+@Api("Api de Usuários")
 public class UsuarioController {
 
     private UsuarioServiceImpl usuarioService;
@@ -36,6 +39,7 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Api responsável por cadastrar usuário.")
     public Usuario cadastrar(@Valid @RequestBody Usuario usuario) {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
@@ -43,6 +47,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/autenticar")
+    @ApiOperation("Api responsável por autenticar usuário.")
     public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciaisDTO) {
         try {
             Usuario usuario = Usuario.builder()

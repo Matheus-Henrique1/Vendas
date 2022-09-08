@@ -1,5 +1,8 @@
 package matheus.com.vendas.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import matheus.com.vendas.entity.Produto;
 import matheus.com.vendas.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/produtos")
+@Api("Api de Produtos")
 public class ProdutoController {
 
     private ProdutoRepository produtoRepository;
@@ -27,8 +31,9 @@ public class ProdutoController {
     }
 
 
-    @GetMapping("/{id}")
-    public Produto buscarProdutoPorId(@PathVariable("id") Integer id) {
+    @GetMapping("/buscar-por-id/{id}")
+    @ApiOperation("Api responsável por buscar produto pelo id.")
+    public Produto buscarProdutoPorId(@ApiParam("id do produto") @PathVariable("id") Integer id) {
         return produtoRepository
                 .findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado!"));
@@ -36,13 +41,15 @@ public class ProdutoController {
 
     @PostMapping("/cadastrar")
     @ResponseStatus(CREATED)
+    @ApiOperation("Api responsável por cadastrar produto.")
     public Produto cadastrar(@Valid @RequestBody Produto produto) {
         return produtoRepository.save(produto);
     }
 
     @DeleteMapping("/deletar/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void deletar(@PathVariable("id") Integer id) {
+    @ApiOperation("Api responsável por deletar produto.")
+    public void deletar(@ApiParam("id do produto") @PathVariable("id") Integer id) {
         produtoRepository.findById(id)
                 .map(produto -> {
                     produtoRepository.delete(produto);
@@ -52,7 +59,8 @@ public class ProdutoController {
 
     @PutMapping("/atualizar/{id}")
     @ResponseStatus(NO_CONTENT)
-    public void atualizar(@Valid @PathVariable("id") Integer id, @RequestBody Produto produto) {
+    @ApiOperation("Api responsável por atualizar produto.")
+    public void atualizar(@ApiParam("id do produto") @Valid @PathVariable("id") Integer id, @RequestBody Produto produto) {
         produtoRepository
                 .findById(id)
                 .map(p -> {
@@ -63,6 +71,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/buscar-por-filtro")
+    @ApiOperation("Api responsável por buscar produto por filtro.")
     public List<Produto> buscarPorFiltro(Produto filtro) {
         ExampleMatcher matcher = ExampleMatcher
                 .matching()

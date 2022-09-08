@@ -1,5 +1,8 @@
 package matheus.com.vendas.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import matheus.com.vendas.entity.Cliente;
 import matheus.com.vendas.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +17,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
+@Api("Api de Clientes")
 public class ClienteController {
 
     private ClienteRepository clienteRepository;
 
     @Autowired
-    public ClienteController(ClienteRepository clienteRepository){
+    public ClienteController(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
-    @GetMapping("/{id}")
-    public Cliente buscarClientePorId(@PathVariable("id") Integer id) {
+    @GetMapping("/buscar-por-id/{id}")
+    @ApiOperation("Api responsável por buscar cliente pelo id.")
+    public Cliente buscarClientePorId(@ApiParam("id do cliente") @PathVariable("id") Integer id) {
         return clienteRepository
                 .findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
@@ -32,13 +37,15 @@ public class ClienteController {
 
     @PostMapping("/cadastrar")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Api responsável por cadastrar cliente.")
     public Cliente cadastrar(@Valid @RequestBody Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
     @DeleteMapping("/deletar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable("id") Integer id) {
+    @ApiOperation("Api responsável por deletar cliente pelo id.")
+    public void deletar(@ApiParam("id do cliente") @PathVariable("id") Integer id) {
         clienteRepository.findById(id)
                 .map(cliente -> {
                     clienteRepository.delete(cliente);
@@ -49,7 +56,8 @@ public class ClienteController {
 
     @PutMapping("/atualizar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@Valid @PathVariable("id") Integer id, @RequestBody Cliente cliente) {
+    @ApiOperation("Api responsável por atualizar cliente pelo id.")
+    public void atualizar(@ApiParam("id do cliente") @Valid @PathVariable("id") Integer id, @RequestBody Cliente cliente) {
         clienteRepository
                 .findById(id)
                 .map(clienteExistente -> {
@@ -60,6 +68,7 @@ public class ClienteController {
     }
 
     @GetMapping("/buscar-por-filtro")
+    @ApiOperation("Api responsável por buscar cliente por filtro.")
     public List<Cliente> buscarClientePorFiltro(Cliente filtro) {
         ExampleMatcher matcher = ExampleMatcher
                 .matching()

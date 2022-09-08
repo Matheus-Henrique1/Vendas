@@ -1,5 +1,8 @@
 package matheus.com.vendas.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import matheus.com.vendas.dto.AtualizacaoStatusPedidoDTO;
 import matheus.com.vendas.dto.PedidoDTO;
 import matheus.com.vendas.dto.SaidaItemPedidoDTO;
@@ -25,6 +28,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("/pedidos")
+@Api("Api de Pedidos")
 public class PedidoController {
 
     private PedidoService service;
@@ -36,13 +40,15 @@ public class PedidoController {
 
     @PostMapping("/cadastrar")
     @ResponseStatus(CREATED)
+    @ApiOperation("Api responsável por cadastrar pedido.")
     public Integer cadastrar(@Valid @RequestBody PedidoDTO dto) {
         Pedido pedido = service.salvar(dto);
         return pedido.getId();
     }
 
     @GetMapping("/buscar-por-id/{id}")
-    public SaidaPedidoDTO buscarPedidoPorId(@PathVariable("id") Integer id) {
+    @ApiOperation("Api responsável por buscar pedido por id.")
+    public SaidaPedidoDTO buscarPedidoPorId(@ApiParam("id do pedido") @PathVariable("id") Integer id) {
         return service
                 .obterPedidoCompleto(id)
                 .map(p -> converter(p))
@@ -78,7 +84,8 @@ public class PedidoController {
 
     @PatchMapping("/atualizar-status/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizarStatus(@PathVariable("id") Integer id, @RequestBody AtualizacaoStatusPedidoDTO dto) {
+    @ApiOperation("Api responsável por atualizar status do pedido.")
+    public void atualizarStatus(@ApiParam("id do pedido") @PathVariable("id") Integer id, @RequestBody AtualizacaoStatusPedidoDTO dto) {
         String novoStatus = dto.getNovoStatus();
         service.atualizarStatus(id, StatusPedido.valueOf(novoStatus));
     }
